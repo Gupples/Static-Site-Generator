@@ -20,4 +20,3 @@ class HTMLNode:
 
     def __repr__(self):
         print(f"HTMLNode(tag={self.tag}, value={self.value}, children={self.children}, props={self.props})")
-        
