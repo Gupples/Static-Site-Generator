@@ -1,5 +1,5 @@
 import unittest
-from inline_markdown import split_nodes_delimiter
+from inline_markdown import split_nodes_delimiter, extract_markdown_images, extract_markdown_links
 from textnode import TextType, TextNode
 
 class TestDelimiterSplit(unittest.TestCase):
@@ -57,3 +57,48 @@ class TestDelimiterSplit(unittest.TestCase):
             new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
             print(new_nodes)
         self.assertEqual(str(e.exception), "Invalid Markdown; no closing delimiter")
+
+class TestExtractors(unittest.TestCase):
+    def test_extract_markdown_images_none(self):
+        text = "This string has no image"
+        images = extract_markdown_images(text)
+        expected = []
+        self.assertEqual(len(images), 0)
+        self.assertListEqual(images, expected)
+
+    def test_extract_markdown_images_one(self):
+        text = "This string has one image; ![rick roll](https://i.imgur.com/aKaOqIh.gif)"
+        images = extract_markdown_images(text)
+        expected = [("rick roll", "https://i.imgur.com/aKaOqIh.gif")]
+        self.assertEqual(len(images), 1)
+        self.assertListEqual(images, expected)
+
+    def test_extract_markdown_images_two(self):
+        text = "This string has some images; ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        images = extract_markdown_images(text)
+        expected = [("rick roll", "https://i.imgur.com/aKaOqIh.gif"),
+                     ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg"),]
+        self.assertEqual(len(images), 2)
+        self.assertListEqual(images, expected)
+
+    def test_extract_markdown_links_none(self):
+        text = "This string has no links"
+        links = extract_markdown_links(text)
+        expected = []
+        self.assertEqual(len(links), 0)
+        self.assertListEqual(links, expected)
+
+    def test_extract_markdown_links_one(self):
+        text = "This string has a link; [rick roll](https://i.imgur.com/aKaOqIh.gif)"
+        links = extract_markdown_links(text)
+        expected = [("rick roll", "https://i.imgur.com/aKaOqIh.gif"),]
+        self.assertEqual(len(links), 1)
+        self.assertListEqual(links, expected)
+
+    def test_extract_markdown_links_some(self):
+        text = "This string has some links; [A guide to vigilance](https://youtu.be/dQw4w9WgXcQ?si=_4faL0F6NnUpr9cB) and [obi wan](https://youtu.be/rEq1Z0bjdwc?si=P7c4XsN1BQj2ogdS)"
+        links = extract_markdown_links(text)
+        expected = [("A guide to vigilance", "https://youtu.be/dQw4w9WgXcQ?si=_4faL0F6NnUpr9cB"),
+                     ("obi wan", "https://youtu.be/rEq1Z0bjdwc?si=P7c4XsN1BQj2ogdS"),]
+        self.assertEqual(len(links), 2)
+        self.assertListEqual(links, expected)
