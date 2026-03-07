@@ -1,12 +1,13 @@
 import os
 import shutil
 from textnode import TextNode, TextType
+from generatecontent import generate_page
 
 def replace_files(source, destination):
     # Get the contents of the directory
     contents = os.listdir(source)
 
-    # Create the source directory if it doesn't exist
+    # Create the destination directory if it doesn't exist
     if not os.path.exists(destination):
         os.mkdir(destination)
 
@@ -19,6 +20,9 @@ def replace_files(source, destination):
             shutil.copy(from_filepath, to_filepath)
         else:
             replace_files(from_filepath, to_filepath)
+        
+    # Generate the page
+    generate_page("content/index.md", "template.html", "public/index.html")
 
 def main():
     # Refresh public contents
