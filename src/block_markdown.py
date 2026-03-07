@@ -58,7 +58,7 @@ def markdown_to_html_node(markdown):
                 html_children.append(ParentNode(f"h{hashes}", heading_nodes))
             case BlockType.QUOTE:
                 block = block.split('\n')
-                cleaned = [line.lstrip('>') for line in block]
+                cleaned = [line.lstrip('> ') for line in block]
                 cleaned = '\n'.join(cleaned)
                 quote_nodes = text_to_children(cleaned)
                 html_children.append(ParentNode("blockquote", quote_nodes))
