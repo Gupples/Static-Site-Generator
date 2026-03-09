@@ -1,7 +1,7 @@
 import os
 import shutil
 from textnode import TextNode, TextType
-from generatecontent import generate_page
+from generatecontent import generate_pages_recursive
 
 def replace_files(source, destination):
     # Get the contents of the directory
@@ -22,7 +22,7 @@ def replace_files(source, destination):
             replace_files(from_filepath, to_filepath)
         
     # Generate the page
-    generate_page("content/index.md", "template.html", "public/index.html")
+    generate_pages_recursive("content", "template.html", "public")
 
 def main():
     # Refresh public contents
