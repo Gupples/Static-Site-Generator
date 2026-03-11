@@ -1,5 +1,6 @@
 import os
 import shutil
+import sys
 from textnode import TextNode, TextType
 from generatecontent import generate_pages_recursive
 
@@ -20,15 +21,18 @@ def replace_files(source, destination):
             shutil.copy(from_filepath, to_filepath)
         else:
             replace_files(from_filepath, to_filepath)
+
+    # Make root path configurable
+    basepath = sys.argv[0] if sys.argv[0] else '/'
         
     # Generate the page
-    generate_pages_recursive("content", "template.html", "public")
+    generate_pages_recursive("content", "template.html", "docs", basepath)
 
 def main():
     # Refresh public contents
-    if os.path.exists("public"):
-        shutil.rmtree("public")
-    replace_files("static", "public")
+    if os.path.exists("docs"):
+        shutil.rmtree("docs")
+    replace_files("static", "docs")
 
 
 if __name__ == "__main__":
