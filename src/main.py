@@ -23,7 +23,7 @@ def replace_files(source, destination):
             replace_files(from_filepath, to_filepath)
 
     # Make root path configurable
-    basepath = sys.argv[1] if sys.argv[1] else '/'
+    basepath = sys.argv[1] if len(sys.argv) else '/'
         
     # Generate the page
     generate_pages_recursive("content", "template.html", "docs", basepath)
